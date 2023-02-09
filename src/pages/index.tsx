@@ -1,11 +1,12 @@
 import Head from "next/head";
-import Image from "next/image";
 import styles from "@/styles/Home.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SearchInput from "@/components/SearchInput";
 import ProductItem from "@/components/ProductItem";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { Props } from "@/types.model";
+import { DataItem, Props } from "@/types.model";
+import axios from "axios";
+
 //
 export default function Home({
     data,
@@ -13,7 +14,24 @@ export default function Home({
     //
     const tabs: string[] = ["Trendy foods", "Bread", "Milk", "Egg"];
     const [activeTab, setActive] = useState<number>(0);
+    const [items, setItems] = useState<DataItem[]>([]);
     //
+    useEffect(() => {
+        const fetchData = async (param: string) => {
+            try {
+                const res = await axios.post("https://api.matspar.se/slug", {
+                    query: { q: "kaffe" },
+                    slug: "/kategori",
+                });
+                setItems(res.data.payload.products);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        fetchData("");
+    }, []);
+
     //
     return (
         <>
@@ -48,7 +66,9 @@ export default function Home({
                     ))}
                 </div>
                 <div className={styles.cardWrapper}>
-                    <ProductItem />
+                    {items.map((item: DataItem, index: number) => (
+                        <ProductItem key={index} item={item} />
+                    ))}
                 </div>
             </main>
         </>

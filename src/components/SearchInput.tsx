@@ -49,7 +49,7 @@ const SearchInput = (props: { param: Props }) => {
                 {isFocus && (
                     <div className={styles.searchResult}>
                         <div className={styles.titleInfo}>
-                            <h1>Recent searches</h1>
+                            <h1>Popular searches</h1>
                             <h1 className={styles.clear}>Clear all</h1>
                         </div>
                         {data.suggestions.map((ele, index) => (
@@ -60,7 +60,7 @@ const SearchInput = (props: { param: Props }) => {
                             >
                                 <h1>{ele.text}</h1>
                                 <Image
-                                    src="/close.svg"
+                                    src="/search.svg"
                                     alt="close icon"
                                     width={20}
                                     height={20}

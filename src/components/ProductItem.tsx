@@ -1,23 +1,33 @@
 import Image from "next/image";
 import styles from "@/styles/ProductItem.module.css";
+import { DataItem } from "@/types.model";
 
 //
-const ProductItem = () => {
+
+const ProductItem = (props: { item: DataItem }) => {
+    const getProductImageUrl = (image: string): string => {
+        return image
+            ? `https://d1ax460061ulao.cloudfront.net/140x150/${image[0]}/${image[1]}/${image}.webp`
+            : "";
+    };
+    //
     return (
         <div className={styles.card}>
-            <Image
-                src="/coke.svg"
-                alt="Menu Logo"
-                width={28}
-                height={98}
-                priority
-            />
+            <div className={styles.image}>
+                <Image
+                    src={getProductImageUrl(props.item.image)}
+                    alt="Menu Logo"
+                    width={40}
+                    height={98}
+                    priority
+                />
+            </div>
             <div className={styles.wrapper}>
                 <div>
-                    <h1 className={styles.name}>Product name</h1>
-                    <h1 className={styles.brand}>Brand</h1>
+                    <h1 className={styles.name}>{props.item.name}</h1>
+                    <h1 className={styles.brand}>{props.item.brand}</h1>
                 </div>
-                <h1 className={styles.price}>$299</h1>
+                <h1 className={styles.price}>${props.item.price}</h1>
             </div>
         </div>
     );
