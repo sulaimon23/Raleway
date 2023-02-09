@@ -1,13 +1,18 @@
+import useHttpSearch from "@/hooks/useSearchHook";
 import styles from "@/styles/Search.module.css";
+import { Props } from "@/types.model";
 import Image from "next/image";
-import { useState } from "react";
 
 //
 //
-const SearchInput = () => {
+
+//
+const SearchInput = (props: { param: Props }) => {
     //
-    const [isFocus, setFocus] = useState<boolean>(false);
-
+    const { inputValue, isFocus, setFocus, onChange, data } = useHttpSearch(
+        props.param
+    );
+    console.log(props);
     //
     return (
         <div className={styles.inputWrapper}>
@@ -32,7 +37,13 @@ const SearchInput = () => {
                             height={20}
                             priority
                         />
-                        <input type="text" placeholder="Search Product" />
+                        <input
+                            value={inputValue || ""}
+                            onFocus={() => setFocus(true)}
+                            onChange={(e) => onChange(e)}
+                            type="text"
+                            placeholder="Search Product"
+                        />
                     </div>
                 </div>
                 {isFocus && (
@@ -41,20 +52,22 @@ const SearchInput = () => {
                             <h1>Recent searches</h1>
                             <h1 className={styles.clear}>Clear all</h1>
                         </div>
-                        <button
-                            tabIndex={1}
-                            type="submit"
-                            className={styles.recent}
-                        >
-                            <h1>Coca cola</h1>
-                            <Image
-                                src="/close.svg"
-                                alt="close icon"
-                                width={20}
-                                height={20}
-                                priority
-                            />
-                        </button>
+                        {data.suggestions.map((ele, index) => (
+                            <button
+                                key={`${ele}-${index}`}
+                                type="submit"
+                                className={styles.recent}
+                            >
+                                <h1>{ele.text}</h1>
+                                <Image
+                                    src="/close.svg"
+                                    alt="close icon"
+                                    width={20}
+                                    height={20}
+                                    priority
+                                />
+                            </button>
+                        ))}
                     </div>
                 )}
                 <div className={isFocus ? styles.overlay : ""}></div>

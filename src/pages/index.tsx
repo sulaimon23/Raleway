@@ -5,16 +5,14 @@ import { useState } from "react";
 import SearchInput from "@/components/SearchInput";
 import ProductItem from "@/components/ProductItem";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-
+import { Props } from "@/types.model";
 //
-export default function Home(
-    props: InferGetServerSidePropsType<typeof getServerSideProps>
-) {
+export default function Home({
+    data,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
     //
     const tabs: string[] = ["Trendy foods", "Bread", "Milk", "Egg"];
     const [activeTab, setActive] = useState<number>(0);
-    console.log(props);
-
     //
     //
     return (
@@ -32,7 +30,7 @@ export default function Home(
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <main className={styles.main}>
-                <SearchInput />
+                <SearchInput param={data} />
                 <h1 className={styles.title}>
                     Find your favorite products now.
                 </h1>
@@ -57,22 +55,34 @@ export default function Home(
     );
 }
 
-type Data = {
-    suggestions: [{ test: string }];
-};
-
-export const getServerSideProps: GetServerSideProps<{ data: Data }> = async (
-    context
-) => {
-    const res = await fetch(
-        `https://api.matspar.se/autocomplete?query=${context.query.q}`
-    );
-    const data: Data = await res.json();
-    let param: any = context.query.q;
-    return {
-        props: {
-            data,
+export const getServerSideProps: GetServerSideProps<{
+    data: Props;
+}> = async (context) => {
+    let param: string | string[] = context.query.q || " ";
+    try {
+        const res = await fetch(
+            `https://api.matspar.se/autocomplete?query=${param}`
+        );
+        const data: Props = {
+            data: await res.json(),
             param,
-        },
-    };
+        };
+        return {
+            props: {
+                data,
+            },
+        };
+    } catch (error) {
+        const data: Props = {
+            data: {
+                suggestions: [{ text: "" }],
+            },
+            param,
+        };
+        return {
+            props: {
+                data,
+            },
+        };
+    }
 };
