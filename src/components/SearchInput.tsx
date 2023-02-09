@@ -3,7 +3,7 @@ import styles from "@/styles/Search.module.css";
 import { Props } from "@/types.model";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 //
 //
@@ -11,10 +11,12 @@ import { useEffect, useState } from "react";
 //
 const SearchInput = (props: { param: Props }) => {
     //
+    const searchInput: any = useRef(null);
     const { inputValue, isFocus, setFocus, onChange, data, setValue } =
         useHttpSearch(props.param);
     const router = useRouter();
     const [recent, setRecent] = useState([]);
+    const [cursor, setCursor] = useState<number>(0);
     const [isRecent, setIsRecent] = useState(false);
 
     const search = (e: string) => {
@@ -24,13 +26,10 @@ const SearchInput = (props: { param: Props }) => {
             "recentSearch",
             JSON.stringify(namesSet.slice(0, 5))
         );
-        router
-            .replace({
-                query: { ...router.query, q: e },
-            })
-            .then(() => {
-                setFocus(false);
-            });
+        router.replace({
+            query: { ...router.query, q: e },
+        });
+        setFocus(false);
     };
 
     const getStorage = () => {
@@ -48,13 +47,28 @@ const SearchInput = (props: { param: Props }) => {
     const removeIndex = (index: number) => {
         let storage: any = localStorage.getItem("recentSearch");
         let recentSearch: any = JSON.parse(storage);
-        console.log(recentSearch, index);
+        recentSearch.splice(index, 1);
+        localStorage.setItem("recentSearch", JSON.stringify(recentSearch));
+        setRecent(recentSearch);
     };
     //
     const handleKeyDown = (event: any) => {
+        let activeData = isRecent ? recent : data.suggestions;
         if (event.key === "Enter") {
-            search(event.target.value);
-            setIsRecent(false);
+            if (activeData.length <= 0) {
+                search(event.target.value);
+                setIsRecent(false);
+                searchInput.current.blur();
+            } else {
+                search(activeData[cursor].text);
+                setIsRecent(false);
+                searchInput.current.blur();
+            }
+        }
+        if (event.keyCode === 38 && cursor > 0) {
+            setCursor((prev) => prev - 1);
+        } else if (event.keyCode === 40 && cursor < activeData.length - 1) {
+            setCursor((prev) => prev + 1);
         }
     };
     //
@@ -111,6 +125,7 @@ const SearchInput = (props: { param: Props }) => {
                             type="search"
                             placeholder="Search Product"
                             onKeyDown={handleKeyDown}
+                            ref={searchInput}
                         />
                     </div>
                 </div>
@@ -123,8 +138,10 @@ const SearchInput = (props: { param: Props }) => {
                             <button
                                 key={`${ele}-${index}`}
                                 type="submit"
-                                className={styles.recent}
                                 onClick={() => search(ele.text)}
+                                className={`${styles.recent} ${
+                                    cursor === index ? styles.isActive : ""
+                                }`}
                             >
                                 <h1>{ele.text}</h1>
                                 <Image
@@ -157,7 +174,9 @@ const SearchInput = (props: { param: Props }) => {
                                 <button
                                     key={`${ele}-${index}`}
                                     type="submit"
-                                    className={styles.recent}
+                                    className={`${styles.recent} ${
+                                        cursor === index ? styles.isActive : ""
+                                    }`}
                                 >
                                     <h1
                                         onClick={() => {
@@ -180,7 +199,10 @@ const SearchInput = (props: { param: Props }) => {
                             ))}
                     </div>
                 )}
-                <div className={isFocus ? styles.overlay : ""}></div>
+                <div
+                    onClick={() => setFocus(false)}
+                    className={isFocus ? styles.overlay : ""}
+                ></div>
             </div>
         </div>
     );

@@ -129,6 +129,10 @@
     overflow: hidden;
 }
 
+.isActive {
+    background: #4b4b4b11;
+}
+
 @media (max-width: 768px) {
     .input {
         width: 80%;
