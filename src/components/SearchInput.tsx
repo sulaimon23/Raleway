@@ -7,11 +7,15 @@ import { useState } from "react";
 //
 const SearchInput = () => {
     //
-    const [isFocus, setFocus] = useState(true);
+    const [isFocus, setFocus] = useState(false);
 
     //
     return (
-        <div className={styles.searchWrapper}>
+        <div
+            className={`${styles.searchWrapper} ${
+                isFocus ? styles.position : ""
+            }`}
+        >
             <div className={styles.containInput}>
                 <div className={styles.input}>
                     <Image

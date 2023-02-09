@@ -1,12 +1,15 @@
 .searchWrapper {
     border-top: 0;
-    /* position: fixed; */
     z-index: 103;
     text-align: left;
     overflow: hidden;
     flex-grow: 1;
     left: 20px;
     right: 20px;
+}
+
+.position {
+    position: fixed;
 }
 
 .containInput {
