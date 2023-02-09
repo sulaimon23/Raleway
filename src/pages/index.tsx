@@ -3,11 +3,18 @@ import Image from "next/image";
 import styles from "@/styles/Home.module.css";
 import { useState } from "react";
 import SearchInput from "@/components/SearchInput";
+import ProductItem from "@/components/ProductItem";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 
-export default function Home() {
+//
+export default function Home(
+    props: InferGetServerSidePropsType<typeof getServerSideProps>
+) {
     //
-    const tabs = ["Trendy foods", "Bread", "Milk", "Egg"];
-    const [activeTab, setActive] = useState(0);
+    const tabs: string[] = ["Trendy foods", "Bread", "Milk", "Egg"];
+    const [activeTab, setActive] = useState<number>(0);
+    console.log(props);
+
     //
     //
     return (
@@ -25,16 +32,7 @@ export default function Home() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <main className={styles.main}>
-                <div className={styles.inputWrapper}>
-                    <Image
-                        src="/vector.svg"
-                        alt="Menu Logo"
-                        width={24}
-                        height={24}
-                        priority
-                    />
-                    <SearchInput />
-                </div>
+                <SearchInput />
                 <h1 className={styles.title}>
                     Find your favorite products now.
                 </h1>
@@ -52,40 +50,29 @@ export default function Home() {
                     ))}
                 </div>
                 <div className={styles.cardWrapper}>
-                    <div className={styles.card}>
-                        <Image
-                            src="/coke.svg"
-                            alt="Menu Logo"
-                            width={28}
-                            height={98}
-                            priority
-                        />
-                        <div className={styles.wrapper}>
-                            <div>
-                                <h1 className={styles.name}>Product name</h1>
-                                <h1 className={styles.brand}>Brand</h1>
-                            </div>
-                            <h1 className={styles.price}>$299</h1>
-                        </div>
-                    </div>
-                    <div className={styles.card}>
-                        <Image
-                            src="/coke.svg"
-                            alt="Menu Logo"
-                            width={28}
-                            height={98}
-                            priority
-                        />
-                        <div className={styles.wrapper}>
-                            <div>
-                                <h1 className={styles.name}>Product name</h1>
-                                <h1 className={styles.brand}>Brand</h1>
-                            </div>
-                            <h1 className={styles.price}>$299</h1>
-                        </div>
-                    </div>
+                    <ProductItem />
                 </div>
             </main>
         </>
     );
 }
+
+type Data = {
+    suggestions: [{ test: string }];
+};
+
+export const getServerSideProps: GetServerSideProps<{ data: Data }> = async (
+    context
+) => {
+    const res = await fetch(
+        `https://api.matspar.se/autocomplete?query=${context.query.q}`
+    );
+    const data: Data = await res.json();
+    let param: any = context.query.q;
+    return {
+        props: {
+            data,
+            param,
+        },
+    };
+};

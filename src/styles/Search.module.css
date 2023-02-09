@@ -1,3 +1,13 @@
+.inputWrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.inputWrapper>img {
+    cursor: pointer;
+}
+
 .searchWrapper {
     border-top: 0;
     z-index: 103;
@@ -14,7 +24,7 @@
 
 .containInput {
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
     align-items: flex-start;
 }
 

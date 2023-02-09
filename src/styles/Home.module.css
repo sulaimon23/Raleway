@@ -6,16 +6,6 @@
     box-sizing: border-box;
 }
 
-.inputWrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-}
-
-.inputWrapper>img {
-    cursor: pointer;
-}
-
 .title {
     color: #1B153D;
     line-height: 48px;
@@ -48,62 +38,6 @@
     font-size: 16px;
     line-height: 24px;
     color: rgba(144, 149, 166, 0.65);
-}
-
-.card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 157px;
-    height: 213px;
-    background: #FFFFFF;
-    box-shadow: 0px 20px 35px rgba(23, 20, 57, 0.04);
-    border-radius: 14px;
-    padding: 10px;
-    box-sizing: border-box;
-}
-
-.wrapper {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    flex: 100%;
-    text-align: left;
-}
-
-.name {
-    font-style: normal;
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 19px;
-    letter-spacing: -0.24px;
-    color: #1B153D;
-    order: 0;
-    flex-grow: 0;
-}
-
-.brand {
-    font-family: 'Raleway';
-    font-style: normal;
-    font-weight: 500;
-    font-size: 12px;
-    line-height: 14px;
-    letter-spacing: -0.24px;
-    color: #9095A6;
-    order: 1;
-    flex-grow: 0;
-}
-
-.price {
-    font-style: normal;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 19px;
-    letter-spacing: -0.24px;
-    color: #17A030;
-    flex: none;
-    order: 1;
-    flex-grow: 0;
 }
 
 .cardWrapper {
