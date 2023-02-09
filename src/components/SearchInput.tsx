@@ -60,7 +60,7 @@ const SearchInput = (props: { param: Props }) => {
                                 onChange(e);
                                 setFocus(true);
                             }}
-                            type="search"
+                            type="text"
                             placeholder="Search Product"
                             onKeyDown={handleKeyDown}
                             ref={searchInput}
