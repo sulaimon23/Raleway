@@ -20,6 +20,7 @@ const ProductItem = (props: { item: DataItem }) => {
                     width={40}
                     height={98}
                     priority
+                    quality={100}
                 />
             </div>
             <div className={styles.wrapper}>

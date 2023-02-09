@@ -42,7 +42,17 @@
 
 .cardWrapper {
     display: flex;
-    gap: 25px;
+    gap: 30px;
     margin-top: 20px;
     flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+    .cardWrapper {
+        gap: 20px;
+    }
+
+    .main {
+        padding: 15px;
+    }
 }

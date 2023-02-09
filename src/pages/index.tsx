@@ -17,10 +17,10 @@ export default function Home({
     const [items, setItems] = useState<DataItem[]>([]);
     //
     useEffect(() => {
-        const fetchData = async (param: string) => {
+        const fetchData = async (param: string | string[]) => {
             try {
                 const res = await axios.post("https://api.matspar.se/slug", {
-                    query: { q: "kaffe" },
+                    query: { q: data.param },
                     slug: "/kategori",
                 });
                 setItems(res.data.payload.products);
@@ -29,8 +29,8 @@ export default function Home({
             }
         };
 
-        fetchData("");
-    }, []);
+        fetchData(data.param);
+    }, [data.param]);
 
     //
     return (
@@ -78,7 +78,7 @@ export default function Home({
 export const getServerSideProps: GetServerSideProps<{
     data: Props;
 }> = async (context) => {
-    let param: string | string[] = context.query.q || " ";
+    let param: any = context.query.q || "";
     try {
         const res = await fetch(
             `https://api.matspar.se/autocomplete?query=${param}`

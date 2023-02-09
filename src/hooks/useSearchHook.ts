@@ -5,7 +5,9 @@ import axios from "axios";
 //
 const useHttpSearch = (param: Props) => {
     const [isFocus, setFocus] = useState<boolean>(false);
-    const [inputValue, setValue] = useState<string | string[]>(param.param);
+    const [inputValue, setValue] = useState<string | string[] | null>(
+        param.param
+    );
     const [data, setData] = useState<Data>(param.data);
 
     //
@@ -75,6 +77,7 @@ const useHttpSearch = (param: Props) => {
         setFocus,
         onChange,
         data,
+        setValue,
         // isOpen,
         // clearDate,
         // fetchData,
