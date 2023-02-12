@@ -19,10 +19,13 @@ export default function Home({
     useEffect(() => {
         const fetchData = async (param: string | string[]) => {
             try {
-                const res = await axios.post("https://api.matspar.se/slug", {
-                    query: { q: data.param },
-                    slug: "/kategori",
-                });
+                const res = await axios.post(
+                    "https://cors-anywhere.herokuapp.com/https://api.matspar.se/slug",
+                    {
+                        query: { q: data.param },
+                        slug: "/kategori",
+                    }
+                );
                 setItems(res.data.payload.products);
             } catch (error) {
                 console.log(error);
