@@ -28,7 +28,7 @@ const useHttpSearch = (param: Props) => {
             let config = {
                 method: "get",
                 maxBodyLength: Infinity,
-                url: `https://api.matspar.se/autocomplete?query=${param}`,
+                url: `https://cors-anywhere.herokuapp.com/https://api.matspar.se/autocomplete?query=${param}`,
                 headers: {},
             };
             const res = await axios(config);
